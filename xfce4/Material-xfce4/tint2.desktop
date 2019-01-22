@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.9.4
+Type=Application
+Name=Tint2 Taskbar
+Comment=Autostarts tint2
+Exec=tint2 -c "/home/kazuo/.config/tint2/launchy/launchy.tint2rc
+OnlyShowIn=XFCE;
+StartupNotify=false
+Terminal=false
+Hidden=false
