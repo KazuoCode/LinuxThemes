@@ -5,8 +5,10 @@ GREEN="\033[0;32m"
 RED="\033[0;31m"
 NC="\033[0;0m"
 
-# Functions
+# User
+USR='TEMP'
 
+# Functions
 # Update and upgrading the distro
 update_distro() {
 	printf "•  Updating packages...\n"
@@ -91,9 +93,10 @@ rofi(){
 
 # Add the Tint2 theme to the config folder
 tint2theme() {
+	printf "•  What is your username? "
+	read NOROOT
+	USR=$NOROOT
 	if [ -d "~/.config/tint2/" ]; then
-		printf "•  What is your username?: "
-		read NOROOT
 		printf "${GREEN}✔ ${NC} Tint2 config folder exists.\n"
 		cp -r ~/LinuxThemes/xfce4/Material-xfce4/Launchy ~/.config/tint2/launchy
 		sed -i "s/kazuo/$NOROOT/g" ~/.config/tint2/launchy/launchy.tint2rc	
@@ -146,17 +149,10 @@ gtk() {
 }
 
 autostart(){
-	if [ -d "~/.config/autostart/" ]; then
-		printf "•  Setting up tint2 in autostart...\n"
-		cp ~/LinuxThemes/xfce4/Material-xfce4/tint2.desktop ~/.config/autostart/tint2.desktop
-		printf "${GREEN}✔ ${NC} Tint2 copied into autostart.\n"
-	else
-		printf "${RED}✘ ${NC} Autostart doesnt exists...\n"
-		mkdir -p ~/.config/autostart/
-		printf "${GREEN}✔ ${NC} Autostart created..\n"
-		cp ~/LinuxThemes/xfce4/Material-xfce4/tint2.desktop ~/.config/autostart/tint2.desktop
-		printf "${GREEN}✔ ${NC} Tint2 copied into autostart.\n"
-	fi
+  printf "•  Setting up tint2 on startup\n"
+  echo "tint2 -c '/home/$USR/.config/tint2/launchy/launchy.tint2rc'" >> /etc/init.d/tintexec.sh
+  chmod +x /etc/init.d/tintexec.sh
+  printf "${GREEN}✔ ${NC} Autostart set.\n"
 }
 
 cleanup() {
@@ -171,6 +167,7 @@ setup() {
 	tint2theme
 	util
 	gtk
+	autostart
 	cleanup
 }
 
@@ -226,5 +223,6 @@ if [ "$EUID" -eq 0 ]; then
 else
 	printf "${RED}✘ ${NC} Script is not being run with sudo.\n"
 fi
+
 
 
